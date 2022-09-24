@@ -1,0 +1,35 @@
+﻿<Window x:Class="Lab1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Lab1"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="800" Width="1000">
+    <Grid  x:Name ="gridlayout" Margin="0,0,10,-6" MouseMove="Grid_MouseMove">
+        <TextBox x:Name="PositionX" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="68" Canvas.Left="-191" Canvas.Top="305" Margin="78,98,0,0"/>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="X =" VerticalAlignment="Top" Canvas.Left="-215" Canvas.Top="307" Margin="55,100,0,0"/>
+        <TextBox x:Name="PositionY" HorizontalAlignment="Left" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="68" Canvas.Left="-191" Canvas.Top="322" Margin="78,121,0,0"/>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Y =" VerticalAlignment="Top" Canvas.Left="-214" Canvas.Top="323" Margin="55,123,0,0"/>
+        <TextBox x:Name="transformX" HorizontalAlignment="Left" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="68" Margin="267,98,0,0"/>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Transform X =" VerticalAlignment="Top" Margin="168,100,0,0"/>
+        <TextBox x:Name="transformY" HorizontalAlignment="Left" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="68" Margin="267,122,0,0"/>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Transform Y =" VerticalAlignment="Top" Margin="168,123,0,0"/>
+        <TextBox x:Name="PositionOfCenterX" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="68" Margin="459,100,0,0"/>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="X =" VerticalAlignment="Top" Margin="429,100,0,0"/>
+        <TextBox x:Name="PositionOfCenterY" HorizontalAlignment="Left" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="68" Margin="459,124,0,0"/>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Y =" VerticalAlignment="Top" Margin="429,123,0,0"/>
+        <Canvas x:Name="canvas1" AllowDrop="True"  HorizontalAlignment="Left" Height="458" Margin="126,181,0,0" VerticalAlignment="Top" Width="624" RenderTransformOrigin="0.504,0.495" DragOver="canvas_DragOver">
+            <Canvas.LayoutTransform>
+                <ScaleTransform ScaleX="1" ScaleY="-1" />
+            </Canvas.LayoutTransform>
+
+            <Canvas x:Name="canvas2"  HorizontalAlignment="Left" Height="150" VerticalAlignment="Top" Width="290" RenderTransformOrigin="0.5,0.5" Background="#00F2D8FF" Panel.ZIndex="1" MouseMove="Mouse_move" Canvas.Left="22" Canvas.Top="22">
+            </Canvas>
+
+            <Canvas x:Name="coordCanvas" HorizontalAlignment="Left" Height="458" VerticalAlignment="Top" Width="624" RenderTransformOrigin="0.504,0.495" Background="White"/>
+            <Canvas x:Name="BlankCanvas" Height="458" Width="624" RenderTransformOrigin="0.504,0.495" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Canvas>
+        <Button Content="Draw" HorizontalAlignment="Left" Margin="48,175,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+    </Grid>
+</Window>
