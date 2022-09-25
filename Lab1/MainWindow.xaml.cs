@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -26,15 +27,17 @@ namespace Lab1
     {
         private int canvas1width;
         private int canvas1height;
-        private const int pixel = 25;
+        private int pixel = 25;
         private int degreebegin = 180;
         private int degreeend = 360;
-        private double resolution = 2.5;
-        private int r;
+        private double resolution;
+        private double r;
         private double gamma = 0;
         private double theta = 0;
         private double left;
         private double top;
+        private double leftPositionCenter;
+        private double topPositionCenter;
         private Ellipse pivotpoint = new Ellipse
         {
             Width = 7,
@@ -52,6 +55,16 @@ namespace Lab1
         Point h;
         Point i;
         Point cent;
+
+        Line line1;
+        Line line2;
+        Line line3;
+        Line line4;
+        Line line5;
+        Line line6;
+        Line line7;
+        Line line8;
+        Line line9;
 
         public void Createline(Canvas canvas, Line line, SolidColorBrush brush, double x1, double y1, double x2, double y2) //функція для побудови ліній
         {
@@ -78,7 +91,7 @@ namespace Lab1
         {
             p1.X += xvector;
             p1.Y += yvector;
-            p2.X += yvector;
+            p2.X += xvector;
             p2.Y += yvector;
 
             Createline(BlankCanvas, new Line(), new SolidColorBrush(Colors.Black), p1.X - (canvas2.Width/2), p1.Y - (canvas2.Height/2), p2.X - (canvas2.Width/2), p2.Y - (canvas2.Height/2));
@@ -97,11 +110,11 @@ namespace Lab1
 
         public double Pbeg(double x, double y, double gamma)
         {
-            return Pbeg(r * Math.Cos(gamma) + 314, r * Math.Sin(gamma) + 275, gamma);
+            return Pbeg(r * Math.Cos(gamma) + cent.X, r * Math.Sin(gamma) + cent.Y, gamma);
         }
         public double Pend(double x, double y, double theta)
         {
-            return Pend(r * Math.Cos(theta) + 314, r * Math.Sin(theta) + 275, theta);
+            return Pend(r * Math.Cos(theta) + cent.X, r * Math.Sin(theta) + cent.Y, theta);
         }
         public double SizeinMM(int size)
         {
@@ -114,6 +127,7 @@ namespace Lab1
             SolidColorBrush blackbrush = new SolidColorBrush();
 
             InitializeComponent();
+            resolution = pixel/10.0;
             left = canvas2.Width / 2;
             top = canvas2.Height / 2;
 
@@ -147,28 +161,28 @@ namespace Lab1
             }
             Canvas.SetLeft(pivotpoint, left);
             Canvas.SetTop(pivotpoint, top);
+
             canvas2.Children.Add(pivotpoint);
             ////////Кінець поля/////////
             a = new Point(0, 0);
             b = new Point(0, 0 + SizeinMM(16));
             c = new Point(0 + SizeinMM(32), 0 + SizeinMM(16));
-            d = new Point(0 + SizeinMM(45), canvas2.Height);
-            e = new Point(0 + SizeinMM(45 + 9), canvas2.Height);
-            f = new Point(canvas2.Width - SizeinMM(22), canvas2.Height);
-            g = new Point(canvas2.Width, canvas2.Height);
-            h = new Point(canvas2.Width, 0);
+            d = new Point(0 + SizeinMM(45), 0 + SizeinMM(60));
+            e = new Point(0 + SizeinMM(54), 0 + SizeinMM(60));
+            f = new Point(SizeinMM(116) - SizeinMM(22), SizeinMM(60));
+            g = new Point(SizeinMM(116), SizeinMM(60));
+            h = new Point(SizeinMM(116), 0);
             i = new Point(0 + SizeinMM(32), 0);
-            cent = new Point(canvas2.Width - SizeinMM(42), canvas2.Height);
-            Line line1 = new Line();
-            Line line2 = new Line();
-            Line line3 = new Line();
-            Line line4 = new Line();
-            Line line5 = new Line();
-            Line line6 = new Line();
-            Line line7 = new Line();
-            Line line8 = new Line();
-            Line line9 = new Line();
-
+            cent = new Point(SizeinMM(116) - SizeinMM(42), SizeinMM(60));
+            line1 = new Line();
+            line2 = new Line();
+            line3 = new Line();
+            line4 = new Line();
+            line5 = new Line();
+            line6 = new Line();
+            line7 = new Line();
+            line8 = new Line();
+            line9 = new Line();
             Createline(canvas2, line1, new SolidColorBrush(Colors.Black), a.X, a.Y, b.X, b.Y);//ліва сторона прямокутника AB
             Createline(canvas2, line2, new SolidColorBrush(Colors.Black), b.X, b.Y, c.X, c.Y);//верхня сторона прямокутника BC
             Createline(canvas2, line3, new SolidColorBrush(Colors.Black), c.X, c.Y, d.X, d.Y); //CD
@@ -178,19 +192,24 @@ namespace Lab1
             Createline(canvas2, line7, new SolidColorBrush(Colors.Black), c.X, c.Y, i.X, i.Y);//права сторона прямокутника CI
             Createline(canvas2, line8, new SolidColorBrush(Colors.Black), a.X, a.Y, h.X, h.Y);//нижня сторона основи AH
             CreateCustomArc(canvas2, line9, cent, new SolidColorBrush(Colors.Black), degreebegin, degreeend);
-
+            PositionOfCenterX.Text = ((Canvas.GetTop(pivotpoint)) / pixel).ToString();
+            PositionOfCenterY.Text = ((Canvas.GetTop(pivotpoint)) / pixel).ToString();
         }
         
 
         private void Button_Click(object sender, RoutedEventArgs ev)
         {
-            double xvec = Convert.ToDouble(transformX.Text) * 25;
-            double yvec = Convert.ToDouble(transformY.Text) * 25;
+            double xvec = Convert.ToDouble(transformX.Text) * pixel;
+            double yvec = Convert.ToDouble(transformY.Text) * pixel;
 
             canvas2.Children.Clear();
             BlankCanvas.Children.Clear();
             Canvas.SetLeft(pivotpoint, (left + xvec) - (canvas2.Width / 2));
             Canvas.SetTop(pivotpoint, (top + yvec) - (canvas2.Height/2));
+            leftPositionCenter = Canvas.GetLeft(canvas2);
+            topPositionCenter = Canvas.GetTop(canvas2);
+            PositionOfCenterX.Text = ((Canvas.GetLeft(pivotpoint)) / pixel).ToString();
+            PositionOfCenterY.Text = ((Canvas.GetTop(pivotpoint)) / pixel).ToString();
             Transform(a, b, xvec, yvec);
             Transform(b, c, xvec, yvec);
             Transform(c, d, xvec, yvec);
@@ -206,12 +225,8 @@ namespace Lab1
 
         private void Grid_MouseMove(object sender, MouseEventArgs e)
         {
-            double leftposition = Canvas.GetLeft(canvas2);
-            double topposition = Canvas.GetTop(canvas2);
-            PositionX.Text = (Mouse.GetPosition(coordCanvas).X / 25).ToString();
-            PositionY.Text = (Mouse.GetPosition(coordCanvas).Y / 25).ToString();
-            PositionOfCenterX.Text = ((Canvas.GetLeft(pivotpoint) + leftposition) / 25).ToString();
-            PositionOfCenterY.Text = ((Canvas.GetTop(pivotpoint) + topposition) / 25).ToString();
+            PositionX.Text = (Mouse.GetPosition(coordCanvas).X / pixel).ToString();
+            PositionY.Text = (Mouse.GetPosition(coordCanvas).Y / pixel).ToString();
         }
 
         private void canvas_DragOver(object sender, DragEventArgs e)
@@ -226,8 +241,35 @@ namespace Lab1
             if (e.LeftButton is MouseButtonState.Pressed)
             {
                 DragDrop.DoDragDrop(canvas2, canvas2, DragDropEffects.Move);
-                //DragDrop.DoDragDrop(CenterOfPic, CenterOfPic, DragDropEffects.Move);
             }
+        }
+
+        private void ChangeClick(object sender, RoutedEventArgs ev)
+        {
+            canvas2.Children.Clear();
+            pixel = Convert.ToInt32(pixelcm.Text);
+            resolution = pixel / 10.0;
+            a = new Point(0, 0);
+            b = new Point(0, 0 + SizeinMM(16));
+            c = new Point(0 + SizeinMM(32), 0 + SizeinMM(16));
+            d = new Point(0 + SizeinMM(45), 0 + SizeinMM(60));
+            e = new Point(0 + SizeinMM(54), 0 + SizeinMM(60));
+            f = new Point(SizeinMM(116) - SizeinMM(22), SizeinMM(60));
+            g = new Point(SizeinMM(116), SizeinMM(60));
+            h = new Point(SizeinMM(116), 0);
+            i = new Point(0 + SizeinMM(32), 0);
+            r = SizeinMM(20);
+            cent = new Point(SizeinMM(116) - SizeinMM(42), SizeinMM(60));
+
+            Createline(canvas2, line1, new SolidColorBrush(Colors.Black), a.X, a.Y, b.X, b.Y);//ліва сторона прямокутника AB
+            Createline(canvas2, line2, new SolidColorBrush(Colors.Black), b.X, b.Y, c.X, c.Y);//верхня сторона прямокутника BC
+            Createline(canvas2, line3, new SolidColorBrush(Colors.Black), c.X, c.Y, d.X, d.Y); //CD
+            Createline(canvas2, line4, new SolidColorBrush(Colors.Black), d.X, d.Y, e.X, e.Y); //DE
+            Createline(canvas2, line5, new SolidColorBrush(Colors.Black), g.X, g.Y, f.X, f.Y); //GF
+            Createline(canvas2, line6, new SolidColorBrush(Colors.Black), g.X, g.Y, h.X, h.Y); //вертикальна лінія основи GH
+            Createline(canvas2, line7, new SolidColorBrush(Colors.Black), c.X, c.Y, i.X, i.Y);//права сторона прямокутника CI
+            Createline(canvas2, line8, new SolidColorBrush(Colors.Black), a.X, a.Y, h.X, h.Y);//нижня сторона основи AH
+            CreateCustomArc(canvas2, line9, cent, new SolidColorBrush(Colors.Black), degreebegin, degreeend);
         }
     }
 }
