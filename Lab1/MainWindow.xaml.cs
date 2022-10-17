@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static System.Formats.Asn1.AsnWriter;
 using Color = System.Drawing.Color;
 using Point = System.Windows.Point;
 using Size = System.Windows.Size;
@@ -25,6 +26,12 @@ namespace Lab1
     /// </summary>
     public partial class MainWindow : Window
     {
+        Drawer drawer;
+        CoordSystem coordinateSystemPointsFinder;
+        FigureDrawer figureDrawer;
+        SolidColorBrush blackbrush = new SolidColorBrush();
+        static int RESOLUTION = 25;
+        
         private int canvas1width;
         private int canvas1height;
         private int pixel = 25;
@@ -38,6 +45,12 @@ namespace Lab1
         private double top;
         private double leftPositionCenter;
         private double topPositionCenter;
+
+
+        private double[,] transformationMatrix;
+
+        public List<Point> mainFigurePart = new List<Point>();
+
         private Ellipse pivotpoint = new Ellipse
         {
             Width = 7,
@@ -56,15 +69,6 @@ namespace Lab1
         Point i;
         Point cent;
 
-        Line line1;
-        Line line2;
-        Line line3;
-        Line line4;
-        Line line5;
-        Line line6;
-        Line line7;
-        Line line8;
-        Line line9;
 
         public void Createline(Canvas canvas, Line line, SolidColorBrush brush, double x1, double y1, double x2, double y2) //функція для побудови ліній
         {
@@ -87,22 +91,6 @@ namespace Lab1
                     r * Math.Cos(theta) + p.X, r * Math.Sin(theta) + p.Y);
             }
         }
-        public void Transform(Point p1, Point p2, double xvector, double yvector)
-        {
-            p1.X += xvector;
-            p1.Y += yvector;
-            p2.X += xvector;
-            p2.Y += yvector;
-
-            Createline(BlankCanvas, new Line(), new SolidColorBrush(Colors.Black), p1.X - (canvas2.Width/2), p1.Y - (canvas2.Height/2), p2.X - (canvas2.Width/2), p2.Y - (canvas2.Height/2));
-        }
-        public void TransformArc(Point p1, double xvector, double yvector)
-        {
-            p1.X = p1.X + xvector - (canvas2.Width / 2);
-            p1.Y = p1.Y + yvector - (canvas2.Height / 2);
-            CreateCustomArc(BlankCanvas, new Line(), p1, new SolidColorBrush(Colors.Black), degreebegin, degreeend);
-
-        }
         public double degtoRad(int i)
         {
             return Math.PI * i / 180;
@@ -122,154 +110,208 @@ namespace Lab1
         }
 
         int[,] arr = new int[3, 3];
-        public MainWindow()
-        {
-            SolidColorBrush blackbrush = new SolidColorBrush();
-
-            InitializeComponent();
-            resolution = pixel/10.0;
-            left = canvas2.Width / 2;
-            top = canvas2.Height / 2;
-
-            ////////Початок поля/////////
-            canvas1width = (int)canvas1.Width;
-            canvas1height = (int)canvas1.Height;
-            int countwidth = canvas1width / pixel; //кількість вертикальних ліній
-            int countheight = canvas1height / pixel; //кількість горизонтальних ліній
-            r = (int)(20 * resolution);
-            for (int j = 0; j < 3; j++) //одинична матриця
-            {
-                for (int k = 0; k < 3; k++)
-                {
-                    if (j == k) arr[j, k] = 1;
-                    else arr[j, k] = 0;
-                }
-            }
-            Createline(coordCanvas, new Line(), new SolidColorBrush(Colors.Green), 0, 0, 0, canvas1height); //вертикальна лінія осі
-            Createline(coordCanvas, new Line(), new SolidColorBrush(Colors.Red), 0, 0, canvas1width, 0); //горизонтальна лінія осі
-
-            for (int j = 1; j < countwidth + 1; j++) //лінії клітинок по вертикалі
-            {
-                Line vertG = new Line();
-                Createline(coordCanvas, vertG, new SolidColorBrush(Colors.LightGray), j * pixel, 0, j * pixel, canvas1height);
-            }
-
-            for (int j = 1; j < countheight + 1; j++) //лінії клитинок по горизонталі
-            {
-                Line horG = new Line();
-                Createline(coordCanvas, horG, new SolidColorBrush(Colors.LightGray), 0, j * pixel, canvas1width, j * pixel);
-            }
-            Canvas.SetLeft(pivotpoint, left);
-            Canvas.SetTop(pivotpoint, top);
-
-            canvas2.Children.Add(pivotpoint);
-            ////////Кінець поля/////////
-            a = new Point(0, 0);
-            b = new Point(0, 0 + SizeinMM(16));
-            c = new Point(0 + SizeinMM(32), 0 + SizeinMM(16));
-            d = new Point(0 + SizeinMM(45), 0 + SizeinMM(60));
-            e = new Point(0 + SizeinMM(54), 0 + SizeinMM(60));
-            f = new Point(SizeinMM(116) - SizeinMM(22), SizeinMM(60));
-            g = new Point(SizeinMM(116), SizeinMM(60));
-            h = new Point(SizeinMM(116), 0);
-            i = new Point(0 + SizeinMM(32), 0);
-            cent = new Point(SizeinMM(116) - SizeinMM(42), SizeinMM(60));
-            line1 = new Line();
-            line2 = new Line();
-            line3 = new Line();
-            line4 = new Line();
-            line5 = new Line();
-            line6 = new Line();
-            line7 = new Line();
-            line8 = new Line();
-            line9 = new Line();
-            Createline(canvas2, line1, new SolidColorBrush(Colors.Black), a.X, a.Y, b.X, b.Y);//ліва сторона прямокутника AB
-            Createline(canvas2, line2, new SolidColorBrush(Colors.Black), b.X, b.Y, c.X, c.Y);//верхня сторона прямокутника BC
-            Createline(canvas2, line3, new SolidColorBrush(Colors.Black), c.X, c.Y, d.X, d.Y); //CD
-            Createline(canvas2, line4, new SolidColorBrush(Colors.Black), d.X, d.Y, e.X, e.Y); //DE
-            Createline(canvas2, line5, new SolidColorBrush(Colors.Black), g.X, g.Y, f.X, f.Y); //GF
-            Createline(canvas2, line6, new SolidColorBrush(Colors.Black), g.X, g.Y, h.X, h.Y); //вертикальна лінія основи GH
-            Createline(canvas2, line7, new SolidColorBrush(Colors.Black), c.X, c.Y, i.X, i.Y);//права сторона прямокутника CI
-            Createline(canvas2, line8, new SolidColorBrush(Colors.Black), a.X, a.Y, h.X, h.Y);//нижня сторона основи AH
-            CreateCustomArc(canvas2, line9, cent, new SolidColorBrush(Colors.Black), degreebegin, degreeend);
-            PositionOfCenterX.Text = ((Canvas.GetTop(pivotpoint)) / pixel).ToString();
-            PositionOfCenterY.Text = ((Canvas.GetTop(pivotpoint)) / pixel).ToString();
-        }
         
 
-        private void Button_Click(object sender, RoutedEventArgs ev)
+        
+        public MainWindow()
         {
-            double xvec = Convert.ToDouble(transformX.Text) * pixel;
-            double yvec = Convert.ToDouble(transformY.Text) * pixel;
 
-            canvas2.Children.Clear();
-            BlankCanvas.Children.Clear();
-            Canvas.SetLeft(pivotpoint, (left + xvec) - (canvas2.Width / 2));
-            Canvas.SetTop(pivotpoint, (top + yvec) - (canvas2.Height/2));
-            leftPositionCenter = Canvas.GetLeft(canvas2);
-            topPositionCenter = Canvas.GetTop(canvas2);
-            PositionOfCenterX.Text = ((Canvas.GetLeft(pivotpoint)) / pixel).ToString();
-            PositionOfCenterY.Text = ((Canvas.GetTop(pivotpoint)) / pixel).ToString();
-            Transform(a, b, xvec, yvec);
-            Transform(b, c, xvec, yvec);
-            Transform(c, d, xvec, yvec);
-            Transform(d, e, xvec, yvec);
-            Transform(g, f, xvec, yvec);
-            Transform(g, h, xvec, yvec);
-            Transform(a, h, xvec, yvec);
-            Transform(c, i, xvec, yvec);
-            TransformArc(cent, xvec, yvec);
-            BlankCanvas.Children.Add(pivotpoint);
+            InitializeComponent();
 
+            left = coordCanvas.Width / 2;
+            top = coordCanvas.Height / 2;
+            drawer = new Drawer(coordCanvas);
+            coordinateSystemPointsFinder = new CoordSystem(drawer, coordCanvas, RESOLUTION);
+            figureDrawer = new FigureDrawer(coordCanvas, drawer,
+                                           CmToPixels(Double.Parse(SizeArc.Text)),
+                                           CmToPixels(Double.Parse(SizeA.Text)), CmToPixels(Double.Parse(SizeB.Text)), RESOLUTION);
+
+            DrawScene();
+        }
+        private void DrawScene()
+        {
+            coordinateSystemPointsFinder.DrawCoordinateSystem();
+            figureDrawer.DrawFigure();
+        }
+
+
+     
+
+
+
+        private void Button_ChangeSize_Click(object sender, RoutedEventArgs ev)
+        {
+            drawer = new Drawer(coordCanvas);
+
+            figureDrawer = new FigureDrawer(coordCanvas, drawer,
+                                           CmToPixels(Double.Parse(SizeArc.Text)),
+                                           CmToPixels(Double.Parse(SizeA.Text)), CmToPixels(Double.Parse(SizeB.Text)), RESOLUTION);
+            coordCanvas.Children.Clear();
+            DrawScene();
         }
 
         private void Grid_MouseMove(object sender, MouseEventArgs e)
         {
-            PositionX.Text = (Mouse.GetPosition(coordCanvas).X / pixel).ToString();
-            PositionY.Text = (Mouse.GetPosition(coordCanvas).Y / pixel).ToString();
+            PositionX.Text = (Math.Round(Mouse.GetPosition(coordCanvas).X / pixel, 2)).ToString();
+            PositionY.Text = (Math.Round(Mouse.GetPosition(coordCanvas).Y / pixel, 2)).ToString();
         }
 
         private void canvas_DragOver(object sender, DragEventArgs e)
         {
             Point dropPositionCenterCanvas = e.GetPosition(canvas1);
-            Canvas.SetLeft(canvas2, dropPositionCenterCanvas.X);
-            Canvas.SetTop(canvas2, dropPositionCenterCanvas.Y);
+            Canvas.SetLeft(coordCanvas, dropPositionCenterCanvas.X);
+            Canvas.SetTop(coordCanvas, dropPositionCenterCanvas.Y);
         }
 
         private void Mouse_move(object sender, MouseEventArgs e)
         {
             if (e.LeftButton is MouseButtonState.Pressed)
             {
-                DragDrop.DoDragDrop(canvas2, canvas2, DragDropEffects.Move);
+                DragDrop.DoDragDrop(coordCanvas, coordCanvas, DragDropEffects.Move);
             }
         }
 
-        private void ChangeClick(object sender, RoutedEventArgs ev)
+        private void Button_Default_Click(object sender, RoutedEventArgs e)
         {
-            canvas2.Children.Clear();
-            pixel = Convert.ToInt32(pixelcm.Text);
-            resolution = pixel / 10.0;
-            a = new Point(0, 0);
-            b = new Point(0, 0 + SizeinMM(16));
-            c = new Point(0 + SizeinMM(32), 0 + SizeinMM(16));
-            d = new Point(0 + SizeinMM(45), 0 + SizeinMM(60));
-            e = new Point(0 + SizeinMM(54), 0 + SizeinMM(60));
-            f = new Point(SizeinMM(116) - SizeinMM(22), SizeinMM(60));
-            g = new Point(SizeinMM(116), SizeinMM(60));
-            h = new Point(SizeinMM(116), 0);
-            i = new Point(0 + SizeinMM(32), 0);
-            r = SizeinMM(20);
-            cent = new Point(SizeinMM(116) - SizeinMM(42), SizeinMM(60));
+            SizeArc.Text = "2";
+            SizeA.Text = "3,2";
+            SizeB.Text = "3,2";
+            pixelcm.Text = "25";
+            RESOLUTION = 25;
+            Canvas.SetLeft(pivot, 5 * RESOLUTION);
+            Canvas.SetTop(pivot, 5 * RESOLUTION);
 
-            Createline(canvas2, line1, new SolidColorBrush(Colors.Black), a.X, a.Y, b.X, b.Y);//ліва сторона прямокутника AB
-            Createline(canvas2, line2, new SolidColorBrush(Colors.Black), b.X, b.Y, c.X, c.Y);//верхня сторона прямокутника BC
-            Createline(canvas2, line3, new SolidColorBrush(Colors.Black), c.X, c.Y, d.X, d.Y); //CD
-            Createline(canvas2, line4, new SolidColorBrush(Colors.Black), d.X, d.Y, e.X, e.Y); //DE
-            Createline(canvas2, line5, new SolidColorBrush(Colors.Black), g.X, g.Y, f.X, f.Y); //GF
-            Createline(canvas2, line6, new SolidColorBrush(Colors.Black), g.X, g.Y, h.X, h.Y); //вертикальна лінія основи GH
-            Createline(canvas2, line7, new SolidColorBrush(Colors.Black), c.X, c.Y, i.X, i.Y);//права сторона прямокутника CI
-            Createline(canvas2, line8, new SolidColorBrush(Colors.Black), a.X, a.Y, h.X, h.Y);//нижня сторона основи AH
-            CreateCustomArc(canvas2, line9, cent, new SolidColorBrush(Colors.Black), degreebegin, degreeend);
+            coordinateSystemPointsFinder = new CoordSystem(drawer, coordCanvas, RESOLUTION);
+
+            figureDrawer = new FigureDrawer(coordCanvas, drawer,
+                                           CmToPixels(Double.Parse(SizeArc.Text)),
+                                           CmToPixels(Double.Parse(SizeA.Text)), CmToPixels(Double.Parse(SizeB.Text)), RESOLUTION);
+            coordCanvas.Children.Clear();
+            coordCanvas.Children.Add(pivot);
+            DrawScene();
         }
+
+        private void ChangeEuclid_Click(object sender, RoutedEventArgs e)
+        {
+            Euclid euclideanTransformation = new Euclid();
+            figureDrawer.mainFigurePart = euclideanTransformation.Translate(figureDrawer.mainFigurePart, CmToPixels(Double.Parse(transformX.Text)), CmToPixels(Double.Parse(transformY.Text)));
+          
+            figureDrawer.additionalFigurePart = euclideanTransformation.Translate(figureDrawer.additionalFigurePart, CmToPixels(Double.Parse(transformX.Text)), CmToPixels(Double.Parse(transformY.Text)));
+            coordCanvas.Children.Clear();
+            DrawScene();
+        }
+
+        private void ChangeRotate_Click(object sender, RoutedEventArgs e)
+        {
+            double xvec = CmToPixels(Convert.ToDouble(XPoint.Text));
+            double yvec = CmToPixels(Convert.ToDouble(YPoint.Text));
+
+            Canvas.SetLeft(pivot, xvec);
+            Canvas.SetTop(pivot, yvec);
+
+            Euclid euclideanTransformation = new Euclid();
+            figureDrawer.mainFigurePart = euclideanTransformation.Rotate(figureDrawer.mainFigurePart, Double.Parse(degree.Text), CmToPixels(Double.Parse(XPoint.Text)), CmToPixels(Double.Parse(YPoint.Text)));
+            figureDrawer.additionalFigurePart = euclideanTransformation.Rotate(figureDrawer.additionalFigurePart, Double.Parse(degree.Text), CmToPixels(Double.Parse(XPoint.Text)), CmToPixels(Double.Parse(YPoint.Text)));
+            coordCanvas.Children.Clear();
+
+            
+            coordCanvas.Children.Add(pivot);
+            DrawScene();
+        }
+
+        
+        private void Affine_Click(object sender, RoutedEventArgs e)
+        {
+            Affine affineTransformation = new Affine();
+            figureDrawer.mainFigurePart = affineTransformation.ChangeCoordinateSystem(figureDrawer.mainFigurePart,
+                                                                                      Double.Parse(Xx.Text), Double.Parse(Xy.Text),
+                                                                                      Double.Parse(Yx.Text), Double.Parse(Yy.Text),
+                                                                                      Double.Parse(Ox.Text), Double.Parse(Oy.Text));
+            figureDrawer.additionalFigurePart = affineTransformation.ChangeCoordinateSystem(figureDrawer.additionalFigurePart,
+                                                                          Double.Parse(Xx.Text), Double.Parse(Xy.Text),
+                                                                          Double.Parse(Yx.Text), Double.Parse(Yy.Text),
+                                                                          Double.Parse(Ox.Text), Double.Parse(Oy.Text));
+            coordinateSystemPointsFinder.systemPoints = affineTransformation.ChangeCoordinateSystem(coordinateSystemPointsFinder.systemPoints,
+                                                              Double.Parse(Xx.Text), Double.Parse(Xy.Text),
+                                                              Double.Parse(Yx.Text), Double.Parse(Yy.Text),
+                                                              Double.Parse(Ox.Text), Double.Parse(Oy.Text));
+            coordCanvas.Children.Clear();
+            DrawScene();
+        }
+        
+        
+        private void Projective_Click(object sender, RoutedEventArgs e)
+        {
+            Projective projectiveTransformation = new Projective();
+
+            figureDrawer.mainFigurePart = projectiveTransformation.ChangeCoordinateSystem(figureDrawer.mainFigurePart,
+                                                                            Double.Parse(XXP.Text), Double.Parse(XYP.Text), Double.Parse(XWP.Text),
+                                                                            Double.Parse(YXP.Text), Double.Parse(YYP.Text), Double.Parse(YWP.Text),
+                                                                            Double.Parse(OXP.Text), Double.Parse(OYP.Text), Double.Parse(OWP.Text));
+            figureDrawer.additionalFigurePart = projectiveTransformation.ChangeCoordinateSystem(figureDrawer.additionalFigurePart,
+                                                                            Double.Parse(XXP.Text), Double.Parse(XYP.Text), Double.Parse(XWP.Text),
+                                                                            Double.Parse(YXP.Text), Double.Parse(YYP.Text), Double.Parse(YWP.Text),
+                                                                            Double.Parse(OXP.Text), Double.Parse(OYP.Text), Double.Parse(OWP.Text));
+            coordinateSystemPointsFinder.systemPoints = projectiveTransformation.ChangeCoordinateSystem(coordinateSystemPointsFinder.systemPoints,
+                                                                            Double.Parse(XXP.Text), Double.Parse(XYP.Text), Double.Parse(XWP.Text),
+                                                                            Double.Parse(YXP.Text), Double.Parse(YYP.Text), Double.Parse(YWP.Text),
+                                                                            Double.Parse(OXP.Text), Double.Parse(OYP.Text), Double.Parse(OWP.Text));
+            coordCanvas.Children.Clear();
+
+            DrawScene();
+        }
+
+        //private void Change_Zoom_Click(object sender, RoutedEventArgs e)
+        //{
+        //    Affine affineTransformation = new Affine();
+        //    figureDrawer.mainFigurePart = affineTransformation.Zoom(figureDrawer.mainFigurePart, Double.Parse(pixelcm.Text));
+        //    figureDrawer.additionalFigurePart = affineTransformation.Zoom(figureDrawer.additionalFigurePart, Double.Parse(pixelcm.Text));
+        //    coordinateSystemPointsFinder.systemPoints = affineTransformation.Zoom(coordinateSystemPointsFinder.systemPoints, Double.Parse(pixelcm.Text));
+        //    coordCanvas.Children.Clear();
+        //    DrawScene();
+        //}
+        private void Change_Zoom_Click(object sender, RoutedEventArgs e)
+        {
+            RESOLUTION = Int32.Parse(pixelcm.Text);
+            drawer = new Drawer(coordCanvas);
+            double xvec = CmToPixels(Convert.ToDouble(XPoint.Text));
+            double yvec = CmToPixels(Convert.ToDouble(YPoint.Text));
+
+            Canvas.SetLeft(pivot, xvec);
+            Canvas.SetTop(pivot, yvec);
+            coordinateSystemPointsFinder = new CoordSystem(drawer, coordCanvas, RESOLUTION);
+            
+            figureDrawer = new FigureDrawer(coordCanvas, drawer,
+                                           CmToPixels(Double.Parse(SizeArc.Text)),
+                                           CmToPixels(Double.Parse(SizeA.Text)), CmToPixels(Double.Parse(SizeB.Text)), RESOLUTION);
+            coordCanvas.Children.Clear();
+            coordCanvas.Children.Add(pivot);
+            DrawScene();
+        }
+
+
+        double CmToPixels(double value) => value * RESOLUTION;
+
+
+
+
+
+        double[] Multiplicate(double[] a, double[,] b)
+        {
+            double[] r = new double[a.Length];
+            for (int i = 0; i < b.GetLength(1); i++)
+            {
+                for (int j = 0; j < b.GetLength(0); j++)
+                {
+                    r[j] = 0;
+                    for (int k = 0; k < b.GetLength(0); k++)
+                    {
+                        r[j] += a[k] * b[k, j];
+                    }
+                }
+            }
+            return r;
+        }
+
     }
 }

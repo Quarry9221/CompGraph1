@@ -7,8 +7,14 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="1000">
     <Grid  x:Name ="gridlayout" Margin="0,0,10,-6" MouseMove="Grid_MouseMove">
-        <Grid Margin="10,519,684,44">
-            <TabControl>
+        <Button Content="Змінити розмір" HorizontalAlignment="Left" Margin="465,84,0,0" VerticalAlignment="Top" Click="Button_ChangeSize_Click"/>
+
+        <Grid Margin="10,287,684,98">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="119*"/>
+                <ColumnDefinition Width="29*"/>
+            </Grid.ColumnDefinitions>
+            <TabControl Grid.ColumnSpan="2">
                 <TabItem Header="Euclid">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -20,6 +26,14 @@
                         <TextBox x:Name="transformY" HorizontalAlignment="Left" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="68" Margin="49,84,0,0" Grid.Column="1"/>
                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Transform Y =" VerticalAlignment="Top" Margin="11,85,0,0" Grid.ColumnSpan="2"/>
                         <TextBlock HorizontalAlignment="Left" Height="22" Margin="0,10,0,0" TextWrapping="Wrap" Text="Euclid" VerticalAlignment="Top" Width="67" Grid.ColumnSpan="2"/>
+                        <Button Content="Change" HorizontalAlignment="Left"  VerticalAlignment="Top" Click="ChangeEuclid_Click" Grid.Column="1" Margin="58,121,0,0"/>
+                        <TextBox x:Name="XPoint" Grid.Column="1" HorizontalAlignment="Left" Height="25" Margin="46,196,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="68" />
+                        <TextBox x:Name="YPoint" Grid.Column="1" HorizontalAlignment="Left" Height="25" Margin="46,226,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="68"/>
+                        <TextBox x:Name="degree" Grid.Column="1" HorizontalAlignment="Left" Height="25" Margin="46,256,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="68"/>
+                        <TextBlock Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="22" Margin="5,199,0,0" TextWrapping="Wrap" Text="Coordinate X" VerticalAlignment="Top" Width="89"/>
+                        <TextBlock Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="22" Margin="5,228,0,0" TextWrapping="Wrap" Text="Coordinate Y" VerticalAlignment="Top" Width="89"/>
+                        <TextBlock Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="22" Margin="5,259,0,0" TextWrapping="Wrap" Text="Degree" VerticalAlignment="Top" Width="89"/>
+                        <Button Content="Change" HorizontalAlignment="Left"  VerticalAlignment="Top" Click="ChangeRotate_Click" Grid.Column="1" Margin="58,311,0,0"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Affine">
@@ -34,68 +48,74 @@
                         <TextBlock HorizontalAlignment="Left" Margin="120,30,0,0" TextWrapping="Wrap" Text="Xy" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
                         <TextBlock HorizontalAlignment="Left" Margin="120,68,0,0" TextWrapping="Wrap" Text="Yy" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
                         <TextBlock HorizontalAlignment="Left" Margin="120,102,0,0" TextWrapping="Wrap" Text="0y" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-                        <TextBox HorizontalAlignment="Left" Height="19" Margin="36,27,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="58"/>
-                        <TextBox HorizontalAlignment="Left" Height="19" Margin="36,65,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="58"/>
-                        <TextBox HorizontalAlignment="Left" Height="19" Margin="36,100,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="58"/>
-                        <TextBox HorizontalAlignment="Left" Height="19" Margin="23,27,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="58" Grid.Column="1"/>
-                        <TextBox HorizontalAlignment="Left" Height="19" Margin="23,65,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="58" Grid.Column="1"/>
-                        <TextBox HorizontalAlignment="Left" Height="19" Margin="23,100,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="58" Grid.Column="1"/>
+                        <TextBox x:Name="Xx" HorizontalAlignment="Left" Height="19" Margin="36,27,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="58"/>
+                        <TextBox x:Name="Yx" HorizontalAlignment="Left" Height="19" Margin="36,65,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="58"/>
+                        <TextBox x:Name="Ox" HorizontalAlignment="Left" Height="19" Margin="36,100,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="58"/>
+                        <TextBox x:Name="Xy" HorizontalAlignment="Left" Height="19" Margin="23,27,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="58" Grid.Column="1"/>
+                        <TextBox x:Name="Yy" HorizontalAlignment="Left" Height="19" Margin="23,65,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="58" Grid.Column="1"/>
+                        <TextBox x:Name="Oy" HorizontalAlignment="Left" Height="19" Margin="23,100,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="58" Grid.Column="1"/>
+                        <Button Content="Change" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="22" Margin="94,189,0,0" VerticalAlignment="Top" Width="80" Click="Affine_Click"/>
 
                     </Grid>
                 </TabItem>
                 <TabItem Header="Projective">
                     <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="33*"/>
+                            <ColumnDefinition Width="112*"/>
+                        </Grid.ColumnDefinitions>
                         <TextBlock HorizontalAlignment="Left" Margin="10,27,0,0" TextWrapping="Wrap" Text="Xx" VerticalAlignment="Top"/>
                         <TextBlock HorizontalAlignment="Left" Margin="10,69,0,0" TextWrapping="Wrap" Text="Yx" VerticalAlignment="Top"/>
                         <TextBlock HorizontalAlignment="Left" Margin="10,102,0,0" TextWrapping="Wrap" Text="0x" VerticalAlignment="Top"/>
-                        <TextBlock HorizontalAlignment="Left" Margin="94,30,0,0" TextWrapping="Wrap" Text="Xy" VerticalAlignment="Top"/>
-                        <TextBlock HorizontalAlignment="Left" Margin="94,69,0,0" TextWrapping="Wrap" Text="Yy" VerticalAlignment="Top"/>
-                        <TextBlock HorizontalAlignment="Left" Margin="94,102,0,0" TextWrapping="Wrap" Text="0y" VerticalAlignment="Top"/>
-                        <TextBox HorizontalAlignment="Left" Height="19" Margin="36,27,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40"/>
-                        <TextBox HorizontalAlignment="Left" Height="19" Margin="36,66,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40"/>
-                        <TextBox HorizontalAlignment="Left" Height="19" Margin="36,100,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40"/>
-                        <TextBox HorizontalAlignment="Left" Height="19" Margin="119,27,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40"/>
-                        <TextBox HorizontalAlignment="Left" Height="19" Margin="119,66,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40"/>
-                        <TextBox HorizontalAlignment="Left" Height="19" Margin="119,100,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40"/>
-                        <TextBlock HorizontalAlignment="Left" Margin="180,27,0,0" TextWrapping="Wrap" Text="Wx" VerticalAlignment="Top"/>
-                        <TextBlock HorizontalAlignment="Left" Margin="180,69,0,0" TextWrapping="Wrap" Text="Wy" VerticalAlignment="Top"/>
-                        <TextBlock HorizontalAlignment="Left" Margin="180,102,0,0" TextWrapping="Wrap" Text="W0" VerticalAlignment="Top"/>
-                        <TextBox HorizontalAlignment="Left" Height="19" Margin="206,27,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40"/>
-                        <TextBox HorizontalAlignment="Left" Height="19" Margin="206,66,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="0.425,1.952"/>
-                        <TextBox HorizontalAlignment="Left" Height="19" Margin="206,100,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="28,30,0,0" TextWrapping="Wrap" Text="Xy" VerticalAlignment="Top" Grid.Column="1"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="28,69,0,0" TextWrapping="Wrap" Text="Yy" VerticalAlignment="Top" Grid.Column="1"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="28,102,0,0" TextWrapping="Wrap" Text="0y" VerticalAlignment="Top" Grid.Column="1"/>
+                        <TextBox x:Name="XXP" HorizontalAlignment="Left" Height="19" Margin="36,27,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40" Grid.ColumnSpan="2"/>
+                        <TextBox x:Name="YXP" HorizontalAlignment="Left" Height="19" Margin="36,66,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40" Grid.ColumnSpan="2"/>
+                        <TextBox x:Name="OXP" HorizontalAlignment="Left" Height="19" Margin="36,100,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40" Grid.ColumnSpan="2"/>
+                        <TextBox x:Name="XYP" HorizontalAlignment="Left" Height="19" Margin="53,27,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40" Grid.Column="1"/>
+                        <TextBox x:Name="YYP" HorizontalAlignment="Left" Height="19" Margin="53,66,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40" Grid.Column="1"/>
+                        <TextBox x:Name="OYP" HorizontalAlignment="Left" Height="19" Margin="53,100,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40" Grid.Column="1"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="114,27,0,0" TextWrapping="Wrap" Text="Wx" VerticalAlignment="Top" Grid.Column="1"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="114,69,0,0" TextWrapping="Wrap" Text="Wy" VerticalAlignment="Top" Grid.Column="1"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="114,102,0,0" TextWrapping="Wrap" Text="W0" VerticalAlignment="Top" Grid.Column="1"/>
+                        <TextBox x:Name="XWP" HorizontalAlignment="Left" Height="19" Margin="140,27,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40" Grid.Column="1"/>
+                        <TextBox x:Name="YWP" HorizontalAlignment="Left" Height="19" Margin="140,66,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="0.425,1.952" Grid.Column="1"/>
+                        <TextBox x:Name="OWP" HorizontalAlignment="Left" Height="19" Margin="140,100,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40" Grid.Column="1"/>
+                        <Button Content="Change" HorizontalAlignment="Left" Height="24" Margin="28,172,0,0" VerticalAlignment="Top" Width="83" Click="Projective_Click" Grid.Column="1"/>
 
                     </Grid>
                 </TabItem>
             </TabControl>
         </Grid>
-        <Grid Margin="5,70,689,444">
-            <TextBox x:Name="PositionOfCenterX" HorizontalAlignment="Left" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="62" Margin="199,102,0,0"/>
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Position CenterX =" VerticalAlignment="Top" Margin="91,102,0,0"/>
-            <TextBox x:Name="PositionOfCenterY" HorizontalAlignment="Left" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="62" Margin="199,131,0,0"/>
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Position CenterY =" VerticalAlignment="Center" Margin="91,0,0,0"/>
+        <Grid Margin="5,70,689,521">
 
-            <TextBox x:Name="PositionX" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="63" Canvas.Left="-191" Canvas.Top="305" Margin="198,48,0,0"/>
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Position mouseX =" VerticalAlignment="Top" Canvas.Left="-215" Canvas.Top="307" Margin="91,51,0,0"/>
-            <TextBox x:Name="PositionY" HorizontalAlignment="Left" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="63" Canvas.Left="-191" Canvas.Top="322" Margin="198,71,0,0"/>
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Position mouseY =" VerticalAlignment="Top" Canvas.Left="-214" Canvas.Top="323" Margin="91,69,0,0"/>
+            <TextBox x:Name="PositionX" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="63" Canvas.Left="-191" Canvas.Top="305" Margin="109,13,0,0"/>
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Position mouseX =" VerticalAlignment="Top" Canvas.Left="-215" Canvas.Top="307" Margin="2,16,0,0"/>
+            <TextBox x:Name="PositionY" HorizontalAlignment="Left" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="63" Canvas.Left="-191" Canvas.Top="322" Margin="109,52,0,0"/>
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Position mouseY =" VerticalAlignment="Top" Canvas.Left="-214" Canvas.Top="323" Margin="2,50,0,0"/>
 
-            <Button Content="Draw" HorizontalAlignment="Center" Margin="0,238,0,0" VerticalAlignment="Top" Click="Button_Click"/>
-            <TextBox x:Name="pixelcm" HorizontalAlignment="Left" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="62" Margin="199,164,0,0"/>
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Pixel/cm =" VerticalAlignment="Top" Margin="130,164,0,0"/>
-            <Button Content="Change" HorizontalAlignment="Left" Margin="186,238,0,0" VerticalAlignment="Top" Click="ChangeClick"/>
+
+            <TextBox x:Name="pixelcm" HorizontalAlignment="Left" TextWrapping="Wrap" Text="25" VerticalAlignment="Top" Width="62" Margin="109,90,0,0"/>
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Pixel/cm =" VerticalAlignment="Center" Margin="45,0,0,0"/>
         </Grid>
+        <Viewbox x:Name="canvas1" AllowDrop="True"  HorizontalAlignment="Left" Height="458" Margin="328,175,0,0" VerticalAlignment="Top" Width="624" RenderTransformOrigin="0.504,0.495" DragOver="canvas_DragOver" ClipToBounds="True">
 
-        <Canvas x:Name="canvas1" AllowDrop="True"  HorizontalAlignment="Left" Height="458" Margin="328,175,0,0" VerticalAlignment="Top" Width="624" RenderTransformOrigin="0.504,0.495" DragOver="canvas_DragOver">
-            <Canvas.LayoutTransform>
+            <Viewbox.LayoutTransform>
                 <ScaleTransform ScaleX="1" ScaleY="-1" />
-            </Canvas.LayoutTransform>
+            </Viewbox.LayoutTransform>
 
-            <Canvas x:Name="canvas2"  HorizontalAlignment="Left" Height="150" VerticalAlignment="Top" Width="290" RenderTransformOrigin="0.5,0.5" Background="#00F2D8FF" Panel.ZIndex="1" MouseMove="Mouse_move" Canvas.Left="72" Canvas.Top="25">
-
+            <Canvas x:Name="coordCanvas" HorizontalAlignment="Left" Height="458" VerticalAlignment="Top" Width="624" RenderTransformOrigin="0.504,0.495" Background="White">
+                <Ellipse x:Name="pivot" Height="7" Canvas.Left="64" Stroke="Black" Canvas.Top="124" Width="7" Fill="#FFFF0D0D"/>
             </Canvas>
-
-            <Canvas x:Name="coordCanvas" HorizontalAlignment="Left" Height="458" VerticalAlignment="Top" Width="624" RenderTransformOrigin="0.504,0.495" Background="White"/>
-            <Canvas x:Name="BlankCanvas" Height="458" Width="624" RenderTransformOrigin="0.504,0.495" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </Canvas>
+        </Viewbox>
+        <Button Content="Set as default" HorizontalAlignment="Left" Height="25" Margin="108,21,0,0" VerticalAlignment="Top" Width="91" Click="Button_Default_Click"/>
+        <TextBlock HorizontalAlignment="Left" Height="20" Margin="351,12,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="79"><Run Language="uk-ua" Text="Розмір дуги"/></TextBlock>
+        <TextBox x:Name="SizeArc" HorizontalAlignment="Left" Height="22" Margin="435,10,0,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Width="60"/>
+        <TextBlock HorizontalAlignment="Left" Height="20" Margin="353,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="79" Text="Розмір BC"/>
+        <TextBox x:Name="SizeA" HorizontalAlignment="Left" Height="22" Margin="435,38,0,0" TextWrapping="Wrap" Text="3,2" VerticalAlignment="Top" Width="60"/>
+        <TextBlock HorizontalAlignment="Left" Height="20" Margin="512,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="79" Text="Розмір AD"/>
+        <TextBox x:Name="SizeB" HorizontalAlignment="Left" Height="22" Margin="594,38,0,0" TextWrapping="Wrap" Text="3,2" VerticalAlignment="Top" Width="60"/>
+        <Button Content="Change Zoom" HorizontalAlignment="Left" Height="23" Margin="91,205,0,0" VerticalAlignment="Top" Width="89" Click="Change_Zoom_Click"/>
     </Grid>
 </Window>
