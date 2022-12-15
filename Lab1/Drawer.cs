@@ -24,7 +24,7 @@ namespace Lab1
             Line xAxis = new Line
             {
                 Stroke = Brushes.LightGreen,
-                StrokeThickness = 2,
+                StrokeThickness = 5,
                 X1 = listOfPoints[0].X,
                 Y1 = listOfPoints[0].Y,
                 X2 = listOfPoints[1].X,
@@ -33,7 +33,7 @@ namespace Lab1
             Line yAxis = new Line
             {
                 Stroke = Brushes.Red,
-                StrokeThickness = 2,
+                StrokeThickness = 5,
                 X1 = listOfPoints[0].X,
                 Y1 = listOfPoints[0].Y,
                 X2 = listOfPoints[2].X,

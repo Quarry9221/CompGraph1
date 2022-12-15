@@ -5,39 +5,45 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lab1"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1000">
-    <Grid  x:Name ="gridlayout" Margin="0,0,10,-6" MouseMove="Grid_MouseMove">
-        <Button Content="Змінити розмір" HorizontalAlignment="Left" Margin="465,84,0,0" VerticalAlignment="Top" Click="Button_ChangeSize_Click"/>
+        Title="MainWindow" Height="800" Width="1011">
+    <Grid  x:Name ="gridlayout" Margin="0,0,10,-6">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="221*"/>
+            <ColumnDefinition Width="43*"/>
+            <ColumnDefinition Width="66*"/>
+        </Grid.ColumnDefinitions>
+        <Button Content="Змінити розмір" HorizontalAlignment="Left" Margin="73,270,0,0" VerticalAlignment="Top" Click="Button_ChangeSize_Click" Width="104" Grid.Column="2"/>
 
-        <Grid Margin="10,287,684,98">
+        <Grid Margin="21,329,10,72" Grid.ColumnSpan="2" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="119*"/>
                 <ColumnDefinition Width="29*"/>
             </Grid.ColumnDefinitions>
             <TabControl Grid.ColumnSpan="2">
-                <TabItem Header="Euclid">
+                <TabItem Header="Евклідові">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="61*"/>
-                            <ColumnDefinition Width="227*"/>
+                            <ColumnDefinition Width="20*"/>
+                            <ColumnDefinition Width="41*"/>
+                            <ColumnDefinition Width="229*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox x:Name="transformX" HorizontalAlignment="Left" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="68" Margin="49,60,0,0" Grid.Column="1"/>
-                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Transform X =" VerticalAlignment="Top" Margin="11,62,0,0" Grid.ColumnSpan="2"/>
-                        <TextBox x:Name="transformY" HorizontalAlignment="Left" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="68" Margin="49,84,0,0" Grid.Column="1"/>
-                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Transform Y =" VerticalAlignment="Top" Margin="11,85,0,0" Grid.ColumnSpan="2"/>
-                        <TextBlock HorizontalAlignment="Left" Height="22" Margin="0,10,0,0" TextWrapping="Wrap" Text="Euclid" VerticalAlignment="Top" Width="67" Grid.ColumnSpan="2"/>
-                        <Button Content="Change" HorizontalAlignment="Left"  VerticalAlignment="Top" Click="ChangeEuclid_Click" Grid.Column="1" Margin="58,121,0,0"/>
-                        <TextBox x:Name="XPoint" Grid.Column="1" HorizontalAlignment="Left" Height="25" Margin="46,196,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="68" />
-                        <TextBox x:Name="YPoint" Grid.Column="1" HorizontalAlignment="Left" Height="25" Margin="46,226,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="68"/>
-                        <TextBox x:Name="degree" Grid.Column="1" HorizontalAlignment="Left" Height="25" Margin="46,256,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="68"/>
-                        <TextBlock Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="22" Margin="5,199,0,0" TextWrapping="Wrap" Text="Coordinate X" VerticalAlignment="Top" Width="89"/>
-                        <TextBlock Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="22" Margin="5,228,0,0" TextWrapping="Wrap" Text="Coordinate Y" VerticalAlignment="Top" Width="89"/>
-                        <TextBlock Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="22" Margin="5,259,0,0" TextWrapping="Wrap" Text="Degree" VerticalAlignment="Top" Width="89"/>
-                        <Button Content="Change" HorizontalAlignment="Left"  VerticalAlignment="Top" Click="ChangeRotate_Click" Grid.Column="1" Margin="58,311,0,0"/>
+                        <TextBox x:Name="transformX" HorizontalAlignment="Left" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="68" Margin="49,60,0,0" Grid.Column="2"/>
+                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Зсув по X =" VerticalAlignment="Top" Margin="11,62,0,0" Grid.ColumnSpan="3"/>
+                        <TextBox x:Name="transformY" HorizontalAlignment="Left" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="68" Margin="49,84,0,0" Grid.Column="2"/>
+                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Зсув по Y =" VerticalAlignment="Top" Margin="11,85,0,0" Grid.ColumnSpan="3"/>
+                        <TextBlock HorizontalAlignment="Left" Height="22" Margin="0,10,0,0" TextWrapping="Wrap" Text="Euclid" VerticalAlignment="Top" Width="67" Grid.ColumnSpan="3"/>
+                        <Button Content="Змінити" HorizontalAlignment="Left"  VerticalAlignment="Top" Click="ChangeEuclid_Click" Grid.Column="2" Margin="58,121,0,0"/>
+                        <TextBox x:Name="XPoint" Grid.Column="2" HorizontalAlignment="Left" Height="25" Margin="46,196,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="68" />
+                        <TextBox x:Name="YPoint" Grid.Column="2" HorizontalAlignment="Left" Height="25" Margin="46,226,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="68"/>
+                        <TextBox x:Name="degree" Grid.Column="2" HorizontalAlignment="Left" Height="25" Margin="46,256,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="68"/>
+                        <TextBlock Grid.ColumnSpan="3" HorizontalAlignment="Left" Height="22" Margin="5,199,0,0" TextWrapping="Wrap" Text="Координати X" VerticalAlignment="Top" Width="89"/>
+                        <TextBlock Grid.ColumnSpan="3" HorizontalAlignment="Left" Height="22" Margin="5,228,0,0" TextWrapping="Wrap" Text="Координати Y" VerticalAlignment="Top" Width="89"/>
+                        <TextBlock Grid.ColumnSpan="3" HorizontalAlignment="Left" Height="22" Margin="5,259,0,0" TextWrapping="Wrap" Text="Градуси" VerticalAlignment="Top" Width="89"/>
+                        <Button Content="Змінити" HorizontalAlignment="Left"  VerticalAlignment="Top" Click="ChangeRotate_Click" Grid.Column="2" Margin="58,311,0,0"/>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Affine">
-                    <Grid>
+                <TabItem Header="Афінні">
+                    <Grid Height="220">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="61*"/>
                             <ColumnDefinition Width="84*"/>
@@ -54,12 +60,12 @@
                         <TextBox x:Name="Xy" HorizontalAlignment="Left" Height="19" Margin="23,27,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="58" Grid.Column="1"/>
                         <TextBox x:Name="Yy" HorizontalAlignment="Left" Height="19" Margin="23,65,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="58" Grid.Column="1"/>
                         <TextBox x:Name="Oy" HorizontalAlignment="Left" Height="19" Margin="23,100,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="58" Grid.Column="1"/>
-                        <Button Content="Change" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="22" Margin="94,189,0,0" VerticalAlignment="Top" Width="80" Click="Affine_Click"/>
+                        <Button Content="Змінити" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="22" Margin="94,189,0,0" VerticalAlignment="Top" Width="80" Click="Affine_Click"/>
 
                     </Grid>
                 </TabItem>
-                <TabItem Header="Projective">
-                    <Grid>
+                <TabItem Header="Проєктивні">
+                    <Grid Height="208">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="33*"/>
                             <ColumnDefinition Width="112*"/>
@@ -82,40 +88,39 @@
                         <TextBox x:Name="XWP" HorizontalAlignment="Left" Height="19" Margin="140,27,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40" Grid.Column="1"/>
                         <TextBox x:Name="YWP" HorizontalAlignment="Left" Height="19" Margin="140,66,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="0.425,1.952" Grid.Column="1"/>
                         <TextBox x:Name="OWP" HorizontalAlignment="Left" Height="19" Margin="140,100,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40" Grid.Column="1"/>
-                        <Button Content="Change" HorizontalAlignment="Left" Height="24" Margin="28,172,0,0" VerticalAlignment="Top" Width="83" Click="Projective_Click" Grid.Column="1"/>
+                        <Button Content="Змінити" HorizontalAlignment="Left" Height="24" Margin="28,172,0,0" VerticalAlignment="Top" Width="83" Click="Projective_Click" Grid.Column="1"/>
 
                     </Grid>
                 </TabItem>
             </TabControl>
         </Grid>
-        <Grid Margin="5,70,689,521">
-
-            <TextBox x:Name="PositionX" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="63" Canvas.Left="-191" Canvas.Top="305" Margin="109,13,0,0"/>
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Position mouseX =" VerticalAlignment="Top" Canvas.Left="-215" Canvas.Top="307" Margin="2,16,0,0"/>
-            <TextBox x:Name="PositionY" HorizontalAlignment="Left" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="63" Canvas.Left="-191" Canvas.Top="322" Margin="109,52,0,0"/>
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Position mouseY =" VerticalAlignment="Top" Canvas.Left="-214" Canvas.Top="323" Margin="2,50,0,0"/>
+        <Grid Margin="7,107,0,630" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2" Grid.Column="1">
 
 
-            <TextBox x:Name="pixelcm" HorizontalAlignment="Left" TextWrapping="Wrap" Text="25" VerticalAlignment="Top" Width="62" Margin="109,90,0,0"/>
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Pixel/cm =" VerticalAlignment="Center" Margin="45,0,0,0"/>
+            <TextBox x:Name="pixelcm" HorizontalAlignment="Left" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="62" Margin="80,10,0,0" RenderTransformOrigin="0.5,0.5"/>
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Масштаб =" VerticalAlignment="Top" Margin="10,10,0,0" RenderTransformOrigin="0.5,0"/>
+            <Button Content="Змінити масштаб" HorizontalAlignment="Left" Height="23" Margin="190,5,0,0" VerticalAlignment="Top" Width="112" Click="Change_Zoom_Click"/>
         </Grid>
-        <Viewbox x:Name="canvas1" AllowDrop="True"  HorizontalAlignment="Left" Height="458" Margin="328,175,0,0" VerticalAlignment="Top" Width="624" RenderTransformOrigin="0.504,0.495" DragOver="canvas_DragOver" ClipToBounds="True">
+        <Viewbox x:Name="canvas1" AllowDrop="True"  HorizontalAlignment="Left" Height="458" Margin="30,189,0,0" VerticalAlignment="Top" Width="624" RenderTransformOrigin="0.504,0.495" DragOver="canvas_DragOver" ClipToBounds="True">
 
             <Viewbox.LayoutTransform>
                 <ScaleTransform ScaleX="1" ScaleY="-1" />
             </Viewbox.LayoutTransform>
 
-            <Canvas x:Name="coordCanvas" HorizontalAlignment="Left" Height="458" VerticalAlignment="Top" Width="624" RenderTransformOrigin="0.504,0.495" Background="White">
-                <Ellipse x:Name="pivot" Height="7" Canvas.Left="64" Stroke="Black" Canvas.Top="124" Width="7" Fill="#FFFF0D0D"/>
+            <Canvas x:Name="coordCanvas" HorizontalAlignment="Left" Height="458" VerticalAlignment="Top" Width="624" RenderTransformOrigin="0.504,0.495" Background="#FFF7F7F7">
+                <Ellipse x:Name="pivot" Height="7" Canvas.Left="64" Stroke="Black" Canvas.Top="124" Width="7" Fill="#FF0D11FF"/>
             </Canvas>
         </Viewbox>
-        <Button Content="Set as default" HorizontalAlignment="Left" Height="25" Margin="108,21,0,0" VerticalAlignment="Top" Width="91" Click="Button_Default_Click"/>
-        <TextBlock HorizontalAlignment="Left" Height="20" Margin="351,12,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="79"><Run Language="uk-ua" Text="Розмір дуги"/></TextBlock>
-        <TextBox x:Name="SizeArc" HorizontalAlignment="Left" Height="22" Margin="435,10,0,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Width="60"/>
-        <TextBlock HorizontalAlignment="Left" Height="20" Margin="353,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="79" Text="Розмір BC"/>
-        <TextBox x:Name="SizeA" HorizontalAlignment="Left" Height="22" Margin="435,38,0,0" TextWrapping="Wrap" Text="3,2" VerticalAlignment="Top" Width="60"/>
-        <TextBlock HorizontalAlignment="Left" Height="20" Margin="512,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="79" Text="Розмір AD"/>
-        <TextBox x:Name="SizeB" HorizontalAlignment="Left" Height="22" Margin="594,38,0,0" TextWrapping="Wrap" Text="3,2" VerticalAlignment="Top" Width="60"/>
-        <Button Content="Change Zoom" HorizontalAlignment="Left" Height="23" Margin="91,205,0,0" VerticalAlignment="Top" Width="89" Click="Change_Zoom_Click"/>
+        <Button Content="За замовчуванням" HorizontalAlignment="Left" Height="25" Margin="53,23,0,0" VerticalAlignment="Top" Width="128" Click="Button_Default_Click" Grid.Column="2"/>
+        <TextBlock HorizontalAlignment="Left" Height="36" Margin="57,179,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="90" Grid.Column="2" Text="Top Arc"/>
+        <TextBox x:Name="SizeArc" HorizontalAlignment="Left" Height="22" Margin="158,179,0,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Width="30" Grid.Column="2"/>
+        <TextBlock HorizontalAlignment="Left" Height="37" Margin="56,220,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="106" Grid.Column="2" Text="Bottom Arc"/>
+        <TextBox x:Name="bottomArc" HorizontalAlignment="Left" Height="22" Margin="158,220,0,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Width="30" RenderTransformOrigin="0.067,0.479" Grid.Column="2"/>
+        <TextBlock HorizontalAlignment="Left" Height="32" Margin="19,226,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="94" Grid.Column="1" Text="Left Circle radius"/>
+        <TextBox x:Name="leftCircle" HorizontalAlignment="Left" Height="22" Margin="119,224,0,0" TextWrapping="Wrap" Text="0,5" VerticalAlignment="Top" Width="60" Grid.ColumnSpan="2" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Height="34" Margin="19,180,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="94" Grid.Column="1" Text="Right Circle radius"/>
+        <TextBox x:Name="rightCircle" HorizontalAlignment="Left" Height="22" Margin="119,178,0,0" TextWrapping="Wrap" Text="0,5" VerticalAlignment="Top" Width="60" Grid.ColumnSpan="2" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Height="40" Margin="19,270,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="82" Grid.Column="1"><Run Language="uk-ua" Text="Middle Circle radius"/></TextBlock>
+        <TextBox x:Name="middlecircle" HorizontalAlignment="Left" Height="22" Margin="119,268,0,0" TextWrapping="Wrap" Text="1,5" VerticalAlignment="Top" Width="60" Grid.ColumnSpan="2" Grid.Column="1"/>
     </Grid>
 </Window>

@@ -13,12 +13,13 @@ namespace Lab1
         {
             return (degree * Math.PI / 180);
         }
-        public List<Point> Translate(List<Point> listOfPoints, double m, double n)
+        //Зсув
+        public List<Point> Translate(List<Point> listOfPoints, double dx, double dy)
         {
             List<Point> points = new List<Point>();
             double[,] transformationMatrix = { { 1, 0, 0 },
                                                { 0, 1, 0 },
-                                               { m, n, 1 } };
+                                               { dx, dy, 1 } };
 
             for (int i = 0; i < listOfPoints.Count; i++)
             {
@@ -28,12 +29,13 @@ namespace Lab1
             }
             return points;
         }
-        public List<Point> Rotate(List<Point> listOfPoints, double degree, double m, double n)
+        //Обертання
+        public List<Point> Rotate(List<Point> listOfPoints, double degree, double px, double py)
         {
             List<Point> points = new List<Point>();
             double[,] transformationMatrix = { {  Math.Cos(DegreeToRadian(degree)), Math.Sin(DegreeToRadian(degree)), 0 },
                                                { -Math.Sin(DegreeToRadian(degree)), Math.Cos(DegreeToRadian(degree)), 0 },
-                                               { -m * (Math.Cos(DegreeToRadian(degree)) - 1) + n * Math.Sin(DegreeToRadian(degree)), -m * Math.Sin(DegreeToRadian(degree)) - n * (Math.Cos(DegreeToRadian(degree)) - 1), 1 } };
+                                               { -px * (Math.Cos(DegreeToRadian(degree)) - 1) + py * Math.Sin(DegreeToRadian(degree)), -px * Math.Sin(DegreeToRadian(degree)) - py * (Math.Cos(DegreeToRadian(degree)) - 1), 1 } };
 
             for (int i = 0; i < listOfPoints.Count; i++)
             {
@@ -44,14 +46,14 @@ namespace Lab1
             }
             return points;
         }
-
-        public List<Point> Zoom(List<Point> listOfPoints, double m)
+        //Масштабування
+        public List<Point> Zoom(List<Point> listOfPoints, double s)
         {
             List<Point> points = new List<Point>();
-            double[,] transformationMatrix = { { 1, 0, 0 },
-                                               { 0, 1, 0 },
-                                               { m, m, 1 } };
-            
+            double[,] transformationMatrix = { { s, 0, 0 },
+                                               { 0, s, 0 },
+                                               { 0, 0, 1 } };
+
             for (int i = 0; i < listOfPoints.Count; i++)
             {
                 double[] pointCoordinates = { listOfPoints[i].X, listOfPoints[i].Y, 1 };
@@ -60,7 +62,6 @@ namespace Lab1
             }
             return points;
         }
-
         double[] Multiplicate(double[] a, double[,] b)
         {
             double[] r = new double[a.Length];

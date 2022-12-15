@@ -32,11 +32,6 @@ namespace Lab1
         SolidColorBrush blackbrush = new SolidColorBrush();
         static int RESOLUTION = 25;
         
-        private int canvas1width;
-        private int canvas1height;
-        private int pixel = 25;
-        private int degreebegin = 180;
-        private int degreeend = 360;
         private double resolution;
         private double r;
         private double gamma = 0;
@@ -58,16 +53,6 @@ namespace Lab1
             Fill = Brushes.Pink,
             Stroke = Brushes.Green,
         };
-        Point a;
-        Point b;
-        Point c;
-        Point d;
-        Point e;
-        Point f;
-        Point g;
-        Point h;
-        Point i;
-        Point cent;
 
 
         public void Createline(Canvas canvas, Line line, SolidColorBrush brush, double x1, double y1, double x2, double y2) //функція для побудови ліній
@@ -95,21 +80,6 @@ namespace Lab1
         {
             return Math.PI * i / 180;
         }
-
-        public double Pbeg(double x, double y, double gamma)
-        {
-            return Pbeg(r * Math.Cos(gamma) + cent.X, r * Math.Sin(gamma) + cent.Y, gamma);
-        }
-        public double Pend(double x, double y, double theta)
-        {
-            return Pend(r * Math.Cos(theta) + cent.X, r * Math.Sin(theta) + cent.Y, theta);
-        }
-        public double SizeinMM(int size)
-        {
-            return size * resolution;
-        }
-
-        int[,] arr = new int[3, 3];
         
 
         
@@ -123,8 +93,12 @@ namespace Lab1
             drawer = new Drawer(coordCanvas);
             coordinateSystemPointsFinder = new CoordSystem(drawer, coordCanvas, RESOLUTION);
             figureDrawer = new FigureDrawer(coordCanvas, drawer,
-                                           CmToPixels(Double.Parse(SizeArc.Text)),
-                                           CmToPixels(Double.Parse(SizeA.Text)), CmToPixels(Double.Parse(SizeB.Text)), RESOLUTION);
+                                           CmToPixels(Double.Parse(SizeArc.Text)), CmToPixels(Double.Parse(bottomArc.Text)),
+                                           RESOLUTION, CmToPixels(Double.Parse(leftCircle.Text)), CmToPixels(Double.Parse(rightCircle.Text)),
+                                           CmToPixels(Double.Parse(middlecircle.Text)));
+            
+            Canvas.SetLeft(pivot, 15.5 * RESOLUTION);
+            Canvas.SetTop(pivot, 8.5 * RESOLUTION);
 
             DrawScene();
         }
@@ -135,25 +109,18 @@ namespace Lab1
         }
 
 
-     
-
-
-
         private void Button_ChangeSize_Click(object sender, RoutedEventArgs ev)
         {
             drawer = new Drawer(coordCanvas);
 
             figureDrawer = new FigureDrawer(coordCanvas, drawer,
-                                           CmToPixels(Double.Parse(SizeArc.Text)),
-                                           CmToPixels(Double.Parse(SizeA.Text)), CmToPixels(Double.Parse(SizeB.Text)), RESOLUTION);
+                                           CmToPixels(Double.Parse(SizeArc.Text)), CmToPixels(Double.Parse(bottomArc.Text)),
+                                           RESOLUTION, CmToPixels(Double.Parse(leftCircle.Text)), CmToPixels(Double.Parse(rightCircle.Text)), 
+                                           CmToPixels(Double.Parse(middlecircle.Text)));
+            
             coordCanvas.Children.Clear();
+            coordCanvas.Children.Add(pivot);
             DrawScene();
-        }
-
-        private void Grid_MouseMove(object sender, MouseEventArgs e)
-        {
-            PositionX.Text = (Math.Round(Mouse.GetPosition(coordCanvas).X / pixel, 2)).ToString();
-            PositionY.Text = (Math.Round(Mouse.GetPosition(coordCanvas).Y / pixel, 2)).ToString();
         }
 
         private void canvas_DragOver(object sender, DragEventArgs e)
@@ -174,19 +141,24 @@ namespace Lab1
         private void Button_Default_Click(object sender, RoutedEventArgs e)
         {
             SizeArc.Text = "2";
-            SizeA.Text = "3,2";
-            SizeB.Text = "3,2";
+            bottomArc.Text = "2";
+            leftCircle.Text = "0,5";
+            rightCircle.Text = "0,5";
+            middlecircle.Text = "1,5";
             pixelcm.Text = "25";
             RESOLUTION = 25;
-            Canvas.SetLeft(pivot, 5 * RESOLUTION);
-            Canvas.SetTop(pivot, 5 * RESOLUTION);
+            Canvas.SetLeft(pivot, 15.5 * RESOLUTION);
+            Canvas.SetTop(pivot, 8.5 * RESOLUTION);
 
             coordinateSystemPointsFinder = new CoordSystem(drawer, coordCanvas, RESOLUTION);
 
             figureDrawer = new FigureDrawer(coordCanvas, drawer,
-                                           CmToPixels(Double.Parse(SizeArc.Text)),
-                                           CmToPixels(Double.Parse(SizeA.Text)), CmToPixels(Double.Parse(SizeB.Text)), RESOLUTION);
+                                           CmToPixels(Double.Parse(SizeArc.Text)), CmToPixels(Double.Parse(bottomArc.Text)), RESOLUTION,
+                                           CmToPixels(Double.Parse(leftCircle.Text)), CmToPixels(Double.Parse(rightCircle.Text)),
+                                           CmToPixels(Double.Parse(middlecircle.Text)));
+            
             coordCanvas.Children.Clear();
+            
             coordCanvas.Children.Add(pivot);
             DrawScene();
         }
@@ -197,7 +169,12 @@ namespace Lab1
             figureDrawer.mainFigurePart = euclideanTransformation.Translate(figureDrawer.mainFigurePart, CmToPixels(Double.Parse(transformX.Text)), CmToPixels(Double.Parse(transformY.Text)));
           
             figureDrawer.additionalFigurePart = euclideanTransformation.Translate(figureDrawer.additionalFigurePart, CmToPixels(Double.Parse(transformX.Text)), CmToPixels(Double.Parse(transformY.Text)));
+            figureDrawer.leftCircle = euclideanTransformation.Translate(figureDrawer.leftCircle, CmToPixels(Double.Parse(transformX.Text)), CmToPixels(Double.Parse(transformY.Text)));
+            figureDrawer.rightCircle = euclideanTransformation.Translate(figureDrawer.rightCircle, CmToPixels(Double.Parse(transformX.Text)), CmToPixels(Double.Parse(transformY.Text)));
+            figureDrawer.middleCircle = euclideanTransformation.Translate(figureDrawer.middleCircle, CmToPixels(Double.Parse(transformX.Text)), CmToPixels(Double.Parse(transformY.Text)));
             coordCanvas.Children.Clear();
+
+            coordCanvas.Children.Add(pivot);
             DrawScene();
         }
 
@@ -212,6 +189,9 @@ namespace Lab1
             Euclid euclideanTransformation = new Euclid();
             figureDrawer.mainFigurePart = euclideanTransformation.Rotate(figureDrawer.mainFigurePart, Double.Parse(degree.Text), CmToPixels(Double.Parse(XPoint.Text)), CmToPixels(Double.Parse(YPoint.Text)));
             figureDrawer.additionalFigurePart = euclideanTransformation.Rotate(figureDrawer.additionalFigurePart, Double.Parse(degree.Text), CmToPixels(Double.Parse(XPoint.Text)), CmToPixels(Double.Parse(YPoint.Text)));
+            figureDrawer.leftCircle = euclideanTransformation.Rotate(figureDrawer.leftCircle, Double.Parse(degree.Text), CmToPixels(Double.Parse(XPoint.Text)), CmToPixels(Double.Parse(YPoint.Text)));
+            figureDrawer.rightCircle = euclideanTransformation.Rotate(figureDrawer.rightCircle, Double.Parse(degree.Text), CmToPixels(Double.Parse(XPoint.Text)), CmToPixels(Double.Parse(YPoint.Text)));
+            figureDrawer.middleCircle = euclideanTransformation.Rotate(figureDrawer.middleCircle, Double.Parse(degree.Text), CmToPixels(Double.Parse(XPoint.Text)), CmToPixels(Double.Parse(YPoint.Text)));
             coordCanvas.Children.Clear();
 
             
@@ -224,17 +204,29 @@ namespace Lab1
         {
             Affine affineTransformation = new Affine();
             figureDrawer.mainFigurePart = affineTransformation.ChangeCoordinateSystem(figureDrawer.mainFigurePart,
-                                                                                      Double.Parse(Xx.Text), Double.Parse(Xy.Text),
-                                                                                      Double.Parse(Yx.Text), Double.Parse(Yy.Text),
-                                                                                      Double.Parse(Ox.Text), Double.Parse(Oy.Text));
+                                                                                      CmToPixels(Double.Parse(Xx.Text)), CmToPixels(Double.Parse(Xy.Text)),
+                                                                                      CmToPixels(Double.Parse(Yx.Text)), CmToPixels(Double.Parse(Yy.Text)),
+                                                                                      CmToPixels(Double.Parse(Ox.Text)), CmToPixels(Double.Parse(Oy.Text)));
             figureDrawer.additionalFigurePart = affineTransformation.ChangeCoordinateSystem(figureDrawer.additionalFigurePart,
-                                                                          Double.Parse(Xx.Text), Double.Parse(Xy.Text),
-                                                                          Double.Parse(Yx.Text), Double.Parse(Yy.Text),
-                                                                          Double.Parse(Ox.Text), Double.Parse(Oy.Text));
+                                                                          CmToPixels(Double.Parse(Xx.Text)), CmToPixels(Double.Parse(Xy.Text)),
+                                                                          CmToPixels(Double.Parse(Yx.Text)), CmToPixels(Double.Parse(Yy.Text)),
+                                                                          CmToPixels(Double.Parse(Ox.Text)), CmToPixels(Double.Parse(Oy.Text)));
+            figureDrawer.leftCircle = affineTransformation.ChangeCoordinateSystem(figureDrawer.leftCircle,
+                                                              CmToPixels(Double.Parse(Xx.Text)), CmToPixels(Double.Parse(Xy.Text)),
+                                                              CmToPixels(Double.Parse(Yx.Text)), CmToPixels(Double.Parse(Yy.Text)),
+                                                              CmToPixels(Double.Parse(Ox.Text)), CmToPixels(Double.Parse(Oy.Text)));
+            figureDrawer.rightCircle = affineTransformation.ChangeCoordinateSystem(figureDrawer.rightCircle,
+                                                              CmToPixels(Double.Parse(Xx.Text)), CmToPixels(Double.Parse(Xy.Text)),
+                                                              CmToPixels(Double.Parse(Yx.Text)), CmToPixels(Double.Parse(Yy.Text)),
+                                                              CmToPixels(Double.Parse(Ox.Text)), CmToPixels(Double.Parse(Oy.Text)));
+            figureDrawer.middleCircle = affineTransformation.ChangeCoordinateSystem(figureDrawer.middleCircle,
+                                                              CmToPixels(Double.Parse(Xx.Text)), CmToPixels(Double.Parse(Xy.Text)),
+                                                              CmToPixels(Double.Parse(Yx.Text)), CmToPixels(Double.Parse(Yy.Text)),
+                                                              CmToPixels(Double.Parse(Ox.Text)), CmToPixels(Double.Parse(Oy.Text)));
             coordinateSystemPointsFinder.systemPoints = affineTransformation.ChangeCoordinateSystem(coordinateSystemPointsFinder.systemPoints,
-                                                              Double.Parse(Xx.Text), Double.Parse(Xy.Text),
-                                                              Double.Parse(Yx.Text), Double.Parse(Yy.Text),
-                                                              Double.Parse(Ox.Text), Double.Parse(Oy.Text));
+                                                              CmToPixels(Double.Parse(Xx.Text)), CmToPixels(Double.Parse(Xy.Text)),
+                                                              CmToPixels(Double.Parse(Yx.Text)), CmToPixels(Double.Parse(Yy.Text)),
+                                                              CmToPixels(Double.Parse(Ox.Text)), CmToPixels(Double.Parse(Oy.Text)));
             coordCanvas.Children.Clear();
             DrawScene();
         }
@@ -245,73 +237,67 @@ namespace Lab1
             Projective projectiveTransformation = new Projective();
 
             figureDrawer.mainFigurePart = projectiveTransformation.ChangeCoordinateSystem(figureDrawer.mainFigurePart,
-                                                                            Double.Parse(XXP.Text), Double.Parse(XYP.Text), Double.Parse(XWP.Text),
-                                                                            Double.Parse(YXP.Text), Double.Parse(YYP.Text), Double.Parse(YWP.Text),
-                                                                            Double.Parse(OXP.Text), Double.Parse(OYP.Text), Double.Parse(OWP.Text));
+                                                                            CmToPixels (Double.Parse(XXP.Text)), CmToPixels(Double.Parse(XYP.Text)), CmToPixels(Double.Parse(XWP.Text)),
+                                                                            CmToPixels(Double.Parse(YXP.Text)), CmToPixels(Double.Parse(YYP.Text)), CmToPixels(Double.Parse(YWP.Text)),
+                                                                            CmToPixels(Double.Parse(OXP.Text)), CmToPixels(Double.Parse(OYP.Text)), CmToPixels(Double.Parse(OWP.Text)));
             figureDrawer.additionalFigurePart = projectiveTransformation.ChangeCoordinateSystem(figureDrawer.additionalFigurePart,
-                                                                            Double.Parse(XXP.Text), Double.Parse(XYP.Text), Double.Parse(XWP.Text),
-                                                                            Double.Parse(YXP.Text), Double.Parse(YYP.Text), Double.Parse(YWP.Text),
-                                                                            Double.Parse(OXP.Text), Double.Parse(OYP.Text), Double.Parse(OWP.Text));
+                                                                            CmToPixels(Double.Parse(XXP.Text)), CmToPixels(Double.Parse(XYP.Text)), CmToPixels(Double.Parse(XWP.Text)),
+                                                                            CmToPixels(Double.Parse(YXP.Text)), CmToPixels(Double.Parse(YYP.Text)), CmToPixels(Double.Parse(YWP.Text)),
+                                                                            CmToPixels(Double.Parse(OXP.Text)), CmToPixels(Double.Parse(OYP.Text)), CmToPixels(Double.Parse(OWP.Text)));
+            figureDrawer.leftCircle = projectiveTransformation.ChangeCoordinateSystem(figureDrawer.leftCircle,
+                                                                CmToPixels(Double.Parse(XXP.Text)), CmToPixels(Double.Parse(XYP.Text)), CmToPixels(Double.Parse(XWP.Text)),
+                                                                CmToPixels(Double.Parse(YXP.Text)), CmToPixels(Double.Parse(YYP.Text)), CmToPixels(Double.Parse(YWP.Text)),
+                                                                CmToPixels(Double.Parse(OXP.Text)), CmToPixels(Double.Parse(OYP.Text)), CmToPixels(Double.Parse(OWP.Text)));
+            figureDrawer.rightCircle = projectiveTransformation.ChangeCoordinateSystem(figureDrawer.rightCircle,
+                                                                CmToPixels(Double.Parse(XXP.Text)), CmToPixels(Double.Parse(XYP.Text)), CmToPixels(Double.Parse(XWP.Text)),
+                                                                CmToPixels(Double.Parse(YXP.Text)), CmToPixels(Double.Parse(YYP.Text)), CmToPixels(Double.Parse(YWP.Text)),
+                                                                CmToPixels(Double.Parse(OXP.Text)), CmToPixels(Double.Parse(OYP.Text)), CmToPixels(Double.Parse(OWP.Text)));
+            figureDrawer.middleCircle = projectiveTransformation.ChangeCoordinateSystem(figureDrawer.middleCircle,
+                                                                CmToPixels(Double.Parse(XXP.Text)), CmToPixels(Double.Parse(XYP.Text)), CmToPixels(Double.Parse(XWP.Text)),
+                                                                CmToPixels(Double.Parse(YXP.Text)), CmToPixels(Double.Parse(YYP.Text)), CmToPixels(Double.Parse(YWP.Text)),
+                                                                CmToPixels(Double.Parse(OXP.Text)), CmToPixels(Double.Parse(OYP.Text)), CmToPixels(Double.Parse(OWP.Text)));
             coordinateSystemPointsFinder.systemPoints = projectiveTransformation.ChangeCoordinateSystem(coordinateSystemPointsFinder.systemPoints,
-                                                                            Double.Parse(XXP.Text), Double.Parse(XYP.Text), Double.Parse(XWP.Text),
-                                                                            Double.Parse(YXP.Text), Double.Parse(YYP.Text), Double.Parse(YWP.Text),
-                                                                            Double.Parse(OXP.Text), Double.Parse(OYP.Text), Double.Parse(OWP.Text));
+                                                                            CmToPixels(Double.Parse(XXP.Text)), CmToPixels(Double.Parse(XYP.Text)), CmToPixels(Double.Parse(XWP.Text)),
+                                                                            CmToPixels(Double.Parse(YXP.Text)), CmToPixels(Double.Parse(YYP.Text)), CmToPixels(Double.Parse(YWP.Text)),
+                                                                            CmToPixels(Double.Parse(OXP.Text)), CmToPixels(Double.Parse(OYP.Text)), CmToPixels(Double.Parse(OWP.Text)));
             coordCanvas.Children.Clear();
 
             DrawScene();
         }
 
-        //private void Change_Zoom_Click(object sender, RoutedEventArgs e)
-        //{
-        //    Affine affineTransformation = new Affine();
-        //    figureDrawer.mainFigurePart = affineTransformation.Zoom(figureDrawer.mainFigurePart, Double.Parse(pixelcm.Text));
-        //    figureDrawer.additionalFigurePart = affineTransformation.Zoom(figureDrawer.additionalFigurePart, Double.Parse(pixelcm.Text));
-        //    coordinateSystemPointsFinder.systemPoints = affineTransformation.Zoom(coordinateSystemPointsFinder.systemPoints, Double.Parse(pixelcm.Text));
-        //    coordCanvas.Children.Clear();
-        //    DrawScene();
-        //}
         private void Change_Zoom_Click(object sender, RoutedEventArgs e)
         {
-            RESOLUTION = Int32.Parse(pixelcm.Text);
-            drawer = new Drawer(coordCanvas);
-            double xvec = CmToPixels(Convert.ToDouble(XPoint.Text));
-            double yvec = CmToPixels(Convert.ToDouble(YPoint.Text));
-
-            Canvas.SetLeft(pivot, xvec);
-            Canvas.SetTop(pivot, yvec);
-            coordinateSystemPointsFinder = new CoordSystem(drawer, coordCanvas, RESOLUTION);
-            
-            figureDrawer = new FigureDrawer(coordCanvas, drawer,
-                                           CmToPixels(Double.Parse(SizeArc.Text)),
-                                           CmToPixels(Double.Parse(SizeA.Text)), CmToPixels(Double.Parse(SizeB.Text)), RESOLUTION);
+            Euclid euclidTransformation = new Euclid();
+            figureDrawer.mainFigurePart = euclidTransformation.Zoom(figureDrawer.mainFigurePart, Double.Parse(pixelcm.Text));
+            figureDrawer.additionalFigurePart = euclidTransformation.Zoom(figureDrawer.additionalFigurePart, Double.Parse(pixelcm.Text));
+            figureDrawer.leftCircle = euclidTransformation.Zoom(figureDrawer.leftCircle, Double.Parse(pixelcm.Text));
+            figureDrawer.rightCircle = euclidTransformation.Zoom(figureDrawer.rightCircle, Double.Parse(pixelcm.Text));
+            figureDrawer.middleCircle = euclidTransformation.Zoom(figureDrawer.middleCircle, Double.Parse(pixelcm.Text));
+            coordinateSystemPointsFinder.systemPoints = euclidTransformation.Zoom(coordinateSystemPointsFinder.systemPoints, Double.Parse(pixelcm.Text));
             coordCanvas.Children.Clear();
-            coordCanvas.Children.Add(pivot);
             DrawScene();
         }
+        //private void Change_Zoom_Click(object sender, RoutedEventArgs e)
+        //{
+        //    RESOLUTION = Int32.Parse(pixelcm.Text);
+        //    drawer = new Drawer(coordCanvas);
+        //    double xvec = CmToPixels(Convert.ToDouble(XPoint.Text));
+        //    double yvec = CmToPixels(Convert.ToDouble(YPoint.Text));
+
+        //    Canvas.SetLeft(pivot, xvec);
+        //    Canvas.SetTop(pivot, yvec);
+        //    coordinateSystemPointsFinder = new CoordSystem(drawer, coordCanvas, RESOLUTION);
+
+        //    figureDrawer = new FigureDrawer(coordCanvas, drawer,
+        //                                   CmToPixels(Double.Parse(SizeArc.Text)),
+        //                                   CmToPixels(Double.Parse(SizeA.Text)), CmToPixels(Double.Parse(SizeB.Text)), RESOLUTION);
+        //    coordCanvas.Children.Clear();
+        //    coordCanvas.Children.Add(pivot);
+        //    DrawScene();
+        //}
 
 
         double CmToPixels(double value) => value * RESOLUTION;
-
-
-
-
-
-        double[] Multiplicate(double[] a, double[,] b)
-        {
-            double[] r = new double[a.Length];
-            for (int i = 0; i < b.GetLength(1); i++)
-            {
-                for (int j = 0; j < b.GetLength(0); j++)
-                {
-                    r[j] = 0;
-                    for (int k = 0; k < b.GetLength(0); k++)
-                    {
-                        r[j] += a[k] * b[k, j];
-                    }
-                }
-            }
-            return r;
-        }
 
     }
 }
